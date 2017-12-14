@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title> Hilldale Baptist Church | Service Order Generator</title>
+        <style>{0}
+        </style>
+    </head>
+   
+    <body>
+       
+        <div class="titletop">
+        	<img id="logo" src="https://raw.githubusercontent.com/cshean/appdev2/master/img/church1.png">
+            <h1 id="h1title">Create a new Service: </h1>
+            
+        </div>
+       
+       <div>
+       		 <ul class="menu">
+				  <li class="menuitem">Home</li>
+				  <li class="menuitem">News</li>
+				  <li class="menuitem">Contact Us</li>
+				  <li class="menuitem">Our Beliefs</li>
+			</ul> 
+       </div>
+     
+       {1}
+        <div class="/formSection">
+            <form action="/create" method="get">
+                <table class = "center">
+                    {2}
+                    {3}
+                    <tr>
+                        <td class="inputlabel">
+                            Title:
+                        </td>
+                        <td>
+                            <input class="inputBox" placeholder="Service Title" type="title" name="title"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="inputlabel">
+                            Theme:
+                        </td>
+                        <td>
+                            <input class="inputBox" placeholder="Service Theme" type="theme" name="theme"/>
+                        </td>
+                    </tr>
+                    {4}
+                </table>
+
+           
+                <div class="create">
+                	<input class="createButton" type="submit" value="Create"/>
+                </div>
+            </form>
+        </div>
+
+
+        <div id="contact">
+            <figure class="picturelinks">
+                    
+                    <div class="areacontainer"><img id="area"  class="hvr-grow" src="https://raw.githubusercontent.com/cshean/appdev2/master/img/area.jpg"><div class="areacenter">Our Area</div></div>
+                    <div class="pianocontainer"><img id="piano" class="hvr-grow" src="https://raw.githubusercontent.com/cshean/appdev2/master/img/piano.jpg"><div class="pianocenter">Get Involved</div></div>
+                    <div class="devocontainer"><img id="devo" class="hvr-grow" src="https://raw.githubusercontent.com/cshean/appdev2/master/img/devotionals.jpg"><div class="devocenter">Devotional Plans</div></div>
+            </figure>
+        </div>
+    </body>
+
+
+     <footer>
+			<p> Hilldale Baptist Church, Copyright &copy; 2017 </p>
+	</footer>
+
+    <script type="text/javascript">
+        var currentTime = new Date()
+        var month = currentTime.getMonth() + 1
+        var day = currentTime.getDate()
+        var year = currentTime.getFullYear()
+            
+        if (month < 10) 
+            month = 0 + String(month)
+         else if (day < 10)
+            day = 0 + String(day)
+        
+           var theDate = (year + "-" + month + "-" + day)
+           var theTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+           document.getElementById('theDate').defaultValue = theDate + " " + theTime
+     </script>
+
+</html>

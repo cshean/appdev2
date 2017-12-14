@@ -67,9 +67,6 @@ table.center {
     width: 100%;
 }
 
-.inputlabel {
-	/*text-align: right;*/
-}
 
 .formSection {
 	background-color: #808080;
@@ -83,6 +80,11 @@ table.center {
 	margin: 5px;
 }
 
+.inputDropDown {
+    width: 80%;
+    height: 30px;
+    margin: 5px;
+}
 .create {
 	margin-top: 10px;
     text-align: center;

@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------
 # Carter Shean
 # Application Development II
-# CpS 301, Dr. Schaub
 #-----------------------------------------------------------------
 
 #get necessary modules
@@ -33,7 +32,10 @@ def getTemplateServices():
 		row = """<option value="{0}">{1}</option>""".format( datetime[0], datetime[0])
 		rowId += 1
 		rows += row
-	return """<tr> <td class="inputlabel"> Template Date/Time:</td><td> <select name="templateDate"  class="inputDropDown"> {0} </select></td></tr>""".format(rows)
+	return """<tr> 
+		<td class="inputlabel"> Template Date/Time:</td>
+		<td> <select name="templateDate" class="inputDropDown"> {0} </select></td>
+		</tr>""".format(rows)
 
 #function that gets all previous songleaders and returns a table row containing them in a drop down box
 def getSongLeader():
@@ -54,11 +56,17 @@ def getSongLeader():
 		rowId += 1
 		rows += row
 
-	return """<tr> <td class="inputlabel"> Songleader:</td><td> <select name="songLeader"  class="inputDropDown"> {0} </select></td></tr>""".format(rows)
+	return """<tr> 
+			<td class="inputlabel"> Songleader:</td>
+			<td> <select name="songLeader"  class="inputDropDown"> {0} </select></td>
+			</tr>""".format(rows)
 
 #function that returns a table row in HTML containing the current date using Python's datetime.now() method
 def getCurrentTime():
-	return """<tr><td class="inputlabel">Date/Time(Enter YYYY-MM-DD HH:MM:SS.SS):</td><td><input type="text" id="theDate" value="{0}"class="inputBox" name="theDate"></td></tr>""".format(datetime.now())
+	return """<tr>
+			 <td class="inputlabel">Date/Time(Enter YYYY-MM-DD HH:MM:SS.SS):</td>
+			 <td><input type="text" id="theDate" value="{0}"class="inputBox" name="theDate"></td>
+			 </tr>""".format(datetime.now())
 
 #function that handles a request to the webpage 
 @bottle.route('/')
@@ -128,19 +136,30 @@ def insertService(serviceDate, templateDate, title, theme, songLeader):
 
     #Insert the new service
     thingsToInsert = (serviceID, serviceDate,title,theme,songleader)
-    insertStatement = "INSERT INTO Service(Service_ID, Svc_DateTime, Theme, Title, Notes, Organist_Conf, Songleader_Conf, Pianist_Conf, Organist_ID, Songleader_ID, Pianist_ID) VALUES(%s, %s, %s, %s, NULL, 'N', 'N', 'N', NULL, NULL, %s)"
+    insertStatement = """INSERT INTO Service(Service_ID, Svc_DateTime, Theme, Title, Notes, Organist_Conf, Songleader_Conf, Pianist_Conf, Organist_ID, Songleader_ID, Pianist_ID)
+     					VALUES(%s, %s, %s, %s, NULL, 'N', 'N', 'N', NULL, NULL, %s)"""
     cursor.execute(insertStatement, thingsToInsert)
 
     #Get the template service ID based on the date supplied by the user from the dropdown
     templateDateTuple = (templateDate,)
-    specificService = """SELECT * FROM Service WHERE Svc_DateTime = %s"""
+    specificService = """SELECT *  
+    					FROM Service 
+    					WHERE Svc_DateTime = %s"""
+
     cursor.execute(specificService, templateDateTuple)
     templateServiceID =  (cursor.fetchall()[0][0],)
 
+
     #loop over the service events in the template service and insert new records
-    ServiceEventSelect = """SELECT * FROM ServiceEvent INNER JOIN Service ON ServiceEvent.Service_ID = Service.Service_ID WHERE ServiceEvent.Service_ID = %s"""
+    ServiceEventSelect = """SELECT * 
+    						FROM ServiceEvent
+    					    INNER JOIN Service 
+    					    ON ServiceEvent.Service_ID = Service.Service_ID
+    					    WHERE ServiceEvent.Service_ID = %s"""
+
     cursor.execute(ServiceEventSelect, templateServiceID)
-    newServiceEventInsert = "INSERT INTO ServiceEvent(Event_ID, Service_ID, Seq_Num, EventType_ID, Notes, Confirmed, Person_ID, Ensemble_ID, Song_ID) VALUES(%s, %s, %s, %s, NULL, 'N', NULL, NULL, NULL)"
+    newServiceEventInsert = """INSERT INTO ServiceEvent(Event_ID, Service_ID, Seq_Num, EventType_ID, Notes, Confirmed, Person_ID, Ensemble_ID, Song_ID)
+     							VALUES(%s, %s, %s, %s, NULL, 'N', NULL, NULL, NULL)"""
     for line in cursor.fetchall():
     	cursor.execute(newServiceEventInsert, (serviceEventID, serviceID, line[2], line[3]))
     	serviceEventID += 1
@@ -157,8 +176,8 @@ def createService():
             songLeader = getSongLeader()
            
            #if there is already a service at that date or they didn't supply a date, do nothing and return an error message
-            if  (bottle.request.params['theDate'] == '' or checkCurrent(bottle.request.params['theDate']) == True):
-                return mainpage.format(style,'<p style="color: red; text-align: center;">Unable to insert record!</p>',getCurrentTime(),templateServices, songLeader)
+            if  (bottle.request.params['theDate'] == '' or bottle.request.params['theDate']  checkCurrent(bottle.request.params['theDate']) == True):
+                return mainpage.format(style,'<p style="color: red; text-align: center;">Unable to insert record!</p>', getCurrentTime(),templateServices, songLeader)
             #otherwise, proceed inserting a new service
             else:
             	insertService(bottle.request.params['theDate'],bottle.request.params['templateDate'], bottle.request.params['title'], bottle.request.params['theme'], bottle.request.params['songLeader'])
